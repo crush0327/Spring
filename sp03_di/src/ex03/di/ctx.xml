@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!-- ctx.xml -->
+	<bean class="ex03.di.EmployeePersonImpl" id="employee" 
+	c:name="김연아" c:age="33" c:gender="여자" c:hobbys="독서,영화,잠자기" />
+
+
+	
+
+<!-- 
+<bean id="email" class="ex02.di.message.EmailMessageServiceImpl" />
+	<bean id="twitter" class="ex02.di.message.TwitterMessageServiceImpl" />
+
+	<bean id="myApplication" class="ex02.di.message.MyApplication" />
+	<bean id="myApplication2" class="ex02.di.message.MyApplication" />
+ -->
+
+</beans>

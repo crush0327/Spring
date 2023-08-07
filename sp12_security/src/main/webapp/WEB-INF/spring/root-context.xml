@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+<!-- root context.xml -->
+<!-- <bean
+	class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+	id="dataSource" p:driverClassName="oracle.jdbc.OracleDriver"
+	p:url="jdbc:oracle:thin:@localhost:1521:orcl" p:username="karina" p:password="oracle" /> -->
+ 
+ <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
+		<property name="username" ><value>kingsmile</value></property>
+		<property name="password" ><value>oracle</value></property>
+	</bean> 
+
+		<!-- mybatis -->
+
+  <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+ 	    <property name="dataSource" ><ref bean="dataSource"/></property>
+    	<property name="mapperLocations" value="classpath*:com/example/security/mappers/*xml"/>
+  </bean>
+
+  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	     <constructor-arg index="0" ref="sqlSessionFactoryBean"/>
+ </bean>
+
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+		<property name="dataSource" ref="dataSource"/>
+  </bean>
+
+</beans>

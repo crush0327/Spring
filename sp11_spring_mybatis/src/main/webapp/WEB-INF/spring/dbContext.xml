@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:c="http://www.springframework.org/schema/c"
 	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
- 	
-	<!-- DB -->
-	 <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-	 	<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-	 	<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
-	 	<property name="username" value="kingsmile"/>
-	 	<property name="password" value="oracle"/>
-	 </bean>
-	 
-	 <!-- mybatis -->
-	 <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-	 	<property name="dataSource"><ref bean="dataSource"/></property>			
-	 	<property name="mapperLocations" value="classpath*:kr/co/mycom/model/mapper/*xml"></property>
-	 </bean>
-	 
-	 <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-	 	<constructor-arg index="0" ref="sqlSessionFactoryBean"/>
-	 </bean>
-	 
-	 <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-	 	<property name="dataSource" ref="dataSource"/>
-	 </bean>
-	 
+	xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		id="dataSource" p:driverClassName="oracle.jdbc.OracleDriver"
+		p:url="jdbc:oracle:thin:@192.168.0.19:1521:orcl" p:username="kingsmile" p:password="oracle" />
+
+	<!-- mybatis -->
+	<bean id="sqlSessionFactoryBean"
+		class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:mapperLocations="classpath*:kr/co/mycom/model/mapper/*xml" />
+
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate"
+		c:sqlSessionFactory-ref="sqlSessionFactoryBean" />
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
+		p:dataSource-ref="dataSource"/>
 </beans>

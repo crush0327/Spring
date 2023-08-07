@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- userMapper.xml -->
+
+<mapper namespace="user">
+	<insert id="insertUser" parameterType="java.util.Map">
+		insert into users(userid, name, passwd, enabled, authority)
+		values (#{userid}, #{name}, #{passwd}, 1, #{authority})
+	</insert>
+	<select id="selectUser" resultType="java.util.Map">
+		  select userid as username, passwd as password, name, enabled, authority
+            from users where userid = #{userid}
+	</select>
+
+
+</mapper>

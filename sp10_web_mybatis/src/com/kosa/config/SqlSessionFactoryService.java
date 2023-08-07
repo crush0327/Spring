@@ -7,21 +7,33 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 public class SqlSessionFactoryService {
+	
+	private static SqlSessionFactory  sqlSessionFactory;  
+	
+	static {
+		
+		String source = "./sqlMapConfig.xml";
+		
+		try {
+			Reader reader = Resources.getResourceAsReader(source);
+			sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-   private static SqlSessionFactory sqlSessionFactory = null;
-
-   static {
-      String source = "./sqlMapConfig.xml";
-      try {
-         Reader reader = Resources.getResourceAsReader(source);
-         sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-   }
-
-   public static SqlSessionFactory getSqlSessionInstance() {
-      return sqlSessionFactory;
-   }
-
+	public static SqlSessionFactory getSqlSessionFactory() {
+		return sqlSessionFactory;
+	}
 }
+
+
+
+
+
+
+
+
+

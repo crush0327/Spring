@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration
-PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+					"http://mybatis.org/dtd/mybatis-3-config.dtd"> 
 
-<!-- mybatis-config.xml -->
-<configuration>
-	<!--properties 파일 위치 설정 -->
-	<properties resource="com/kosa/config/oracledb.properties" />
+	<!-- sqlMapConfig.xml -->
+	
+	<configuration>
+	<!-- properties 파일 위치 설정 -->
+	<properties resource="com/kosa/config/oracledb.properties" />	
 
 	<!-- Alias 설정 -->
 	<typeAliases>
-		<typeAlias alias="vo" type="com.kosa.model.BoardVO" />
-		<typeAlias alias="dao" type="com.kosa.dao.BoardDAO" />
+		 <typeAlias  alias="vo"   type="com.kosa.model.BoardVO"/>
 	</typeAliases>
-
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC" />
@@ -25,9 +23,10 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 			</dataSource>
 		</environment>
 	</environments>
-
+	
+	<!-- SQL Mapper 설정 -->
 	<mappers>
 		<mapper resource="mappers/boardmapper.xml" />
 	</mappers>
-
+	
 </configuration>

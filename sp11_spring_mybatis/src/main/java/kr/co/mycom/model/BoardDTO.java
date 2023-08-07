@@ -6,26 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BoardDTO {
 	private int num;
 	private String name, email, pwd, subject, content;
 	private Date regdate;
 	private int hit, parent, sort, tab;
 }
-
-/*
- num NUMBER, 
-	  name VARCHAR2(50), 
-	  email  VARCHAR2(50), 
-	  pwd  VARCHAR2(50), 
-	  subject  VARCHAR2(50), 
-	  content  VARCHAR2(2000), 
-	  regdate  date,
-	  hit  NUMBER, 
-	  parent  NUMBER, 
-	  sort  NUMBER, 
-	  tab  NUMBER
- */

@@ -24,19 +24,13 @@ public class BoardController extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.setCharacterEncoding("UTF-8");
-
-		String cmd = request.getParameter("cmd"); // ~~~~~? cmd=list
-		System.out.println("cmd: " + cmd);
+		String cmd = request.getParameter("cmd"); // ~~/board?cmd=list
+		// System.out.println("cmd : " + cmd);
 
 		if (cmd.equals("list")) {
 			list(request, response);
 		} else if (cmd.equals("write")) {
 			write(request, response);
-		} else if (cmd.equals("writeForm")) {
-			request.getRequestDispatcher("/WEB-INF/views/writeForm.jsp").forward(request, response);
-		} else if (cmd.equals("delete")) {
-			delete(request, response);
 		} else if (cmd.equals("detail")) {
 			detail(request, response);
 		} else if (cmd.equals("update")) {
@@ -45,148 +39,141 @@ public class BoardController extends HttpServlet {
 			search(request, response);
 		} else if (cmd.equals("search2")) {
 			search2(request, response);
+		} else if (cmd.equals("delete")) {
+			delete(request, response);
 		}
+
 	} // service end
 
-	// search
-	private void search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	// delete 
+	public void delete(HttpServletRequest request, 
+			HttpServletResponse response) throws ServletException, IOException {
+		
+		String seq = request.getParameter("seq");
+		BoardDAO dao = new BoardDAO();
+		int rowcount = dao.delete(Integer.parseInt(seq));
+		if( rowcount > 0 ) {
+			list(request, response);   // response.sendRedirect("board?cmd=list");
+		} 
+	} // delete end
+
+	// search 
+	public  void search(HttpServletRequest request, 
+			HttpServletResponse response) throws ServletException, IOException {
+		
 		String column = request.getParameter("column");
 		String keyvalue = request.getParameter("keyvalue");
 		
-		if(column.equals("selection")) {
-			list(request,response);
-			return;
-		}
+		System.out.println(column + ", " + keyvalue);
 		
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("column", column);
 		map.put("keyvalue", keyvalue);
-
+		
 		BoardDAO dao = new BoardDAO();
 		List<BoardVO> list = dao.selectSearchList(map);
 		
-		if (list != null) {
-			request.setAttribute("list", list);
-			request.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(request, response);
+		if( list != null ) {
+			request.setAttribute("list", list); // data save
+			request.getRequestDispatcher("/views/searchList.jsp").forward(request, response);
 		} else {
-			// response.sendRedirect("index.html");
-			request.getRequestDispatcher("/WEB-INF/views/error.jsp");
+			response.sendRedirect("views/error.jsp");
 		}
-
 	}
-
-	private void search2(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	
+	public  void search2(HttpServletRequest request, 
+			HttpServletResponse response) throws ServletException, IOException {
+		
 		String writer = request.getParameter("writer");
-		String content = request.getParameter("content");
+		String content = request.getParameter("contnet");
 		String title = request.getParameter("title");
 		String keyvalue = request.getParameter("keyvalue");
-
+		
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("title", title);
 		map.put("content", content);
 		map.put("writer", writer);
 		map.put("keyvalue", keyvalue);
-
-		BoardDAO dao = new BoardDAO();
-		List<BoardVO> list = dao.selectSearchList2(map);
-
-		if (list != null) {
-			request.setAttribute("list", list);
-			request.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(request, response);
-		} else {
-			// response.sendRedirect("index.html");
-			request.getRequestDispatcher("/WEB-INF/views/error.jsp");
-		}
-
-	}
-
-	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String seq = request.getParameter("seq");
-		String title = (String) request.getParameter("title");
-		String writer = (String) request.getParameter("writer");
-		String content = (String) request.getParameter("content");
-
-		BoardDAO dao = new BoardDAO();
-		BoardVO vo = new BoardVO();
-		vo.setSeq(Integer.parseInt(seq));
-		vo.setTitle(title);
-		vo.setWriter(writer);
-		vo.setContent(content);
-		int num = dao.update(vo);
-
-		if (num > 0) {
-			vo = dao.selectBySeq(Integer.parseInt(seq));
-			if (vo != null) {
-				request.setAttribute("vo", vo);
-				request.getRequestDispatcher("/WEB-INF/views/detail.jsp").forward(request, response);
-			} else {
-				// response.sendRedirect("index.html");
-				request.getRequestDispatcher("/WEB-INF/views/error.jsp");
-			}
-		}
-	}
-
-	private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String seq = request.getParameter("seq");
-		String readcount =request.getParameter("readcount");
-		int num = Integer.parseInt(readcount)+1;
 		
 		BoardDAO dao = new BoardDAO();
-		if (seq != null && readcount != null) {
-			Map<String, Integer> map = new HashMap<String, Integer>();
-			map.put("seq",Integer.parseInt(seq));
-			map.put("readcount",num);
-			dao.updateReadCount(map);
-			BoardVO vo = dao.selectBySeq(Integer.parseInt(seq));
-			if (vo != null) {
-				request.setAttribute("vo", vo);
-				request.getRequestDispatcher("/WEB-INF/views/detail.jsp").forward(request, response);
-			} else {
-				// response.sendRedirect("index.html");
-				request.getRequestDispatcher("/WEB-INF/views/error.jsp");
-			}
+		List<BoardVO> list = dao.selectSearchList2(map);
+		
+		if( list != null ) {
+			request.setAttribute("list", list); // data save
+			request.getRequestDispatcher("/views/searchList.jsp").forward(request, response);
+		} else {
+			response.sendRedirect("views/error.jsp");
 		}
-
+		
 	}
 
-	private void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int seq = Integer.parseInt(request.getParameter("seq"));
+	// update page
+	private void update(HttpServletRequest request, 
+			HttpServletResponse response) throws ServletException, IOException {
+
+		String seq = request.getParameter("seq");
+		String writer = request.getParameter("writer");
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+
 		BoardDAO dao = new BoardDAO();
-		int num = dao.delete(seq);
-		if (num > 0)
+		BoardVO vo = new BoardVO(title, writer, content);
+		vo.setSeq(Integer.parseInt(seq));
+
+		int count = dao.update(vo);
+		if (count > 0) {
+			// response.sendRedirect("board?cmd=list");
 			list(request, response);
+		}
 	}
 
-	private void write(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String title = (String) request.getParameter("title");
-		String writer = (String) request.getParameter("writer");
-		String content = (String) request.getParameter("content");
+	// detail page
+	public void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		BoardVO vo = new BoardVO();
-		vo.setTitle(title);
-		vo.setWriter(writer);
-		vo.setContent(content);
-
+		String seq = request.getParameter("seq");
 		BoardDAO dao = new BoardDAO();
-		int num = dao.insert(vo);
-		if (num > 0)
-			list(request, response);
+		BoardVO vo = dao.detailList(Integer.parseInt(seq));
+
+		if (vo != null) {
+			request.setAttribute("dto", vo);
+			request.getRequestDispatcher("views/detail.jsp").forward(request, response);
+		} else {
+			response.sendRedirect("views/error.jsp");
+		}
 	}
 
-	private void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BoardDAO dao = new BoardDAO();
+	public void write(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+		String title = request.getParameter("title");
+		String writer = request.getParameter("writer");
+		String content = request.getParameter("content");
+
+		// System.out.println(title + ",\t" + writer + ",\t" + content);
+
+		BoardDAO dao = new BoardDAO();
+		BoardVO vo = new BoardVO(title, writer, content);
+
+		int rowcount = dao.insert(vo); // db insert 처리
+
+		if (rowcount > 0) {
+			response.sendRedirect("board?cmd=list");
+		} else {
+			response.sendRedirect("views/error.jsp");
+		}
+	}
+
+	public void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		BoardDAO dao = new BoardDAO();
 		List<BoardVO> list = dao.selectAll();
 
-		if (list != null) {
-			request.setAttribute("list", list);
-			request.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(request, response);
+		if (!list.isEmpty()) {
+			request.setAttribute("list", list); // data save
+			request.getRequestDispatcher("views/list.jsp").forward(request, response);
 		} else {
 			// response.sendRedirect("index.html");
-			request.getRequestDispatcher("/WEB-INF/views/error.jsp");
+			response.sendRedirect("views/error.jsp");
 		}
-
 	}
+
 }

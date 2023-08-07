@@ -1,71 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+											"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 <!-- boardmapper.xml -->
 
+  <!-- SQL DML 명령어 처리 -->
 <mapper namespace="dao">
-	<select id="selectAll" resultType="vo">
-		select * from mybatisBoard
-		order by seq desc
+	<select id="selectAll"  resultType="vo">
+		select * from mybatisBoard order by seq desc
 	</select>
-	<insert id="insert" parameterType="vo">
-		insert into mybatisBoard
-		values(board_seq.nextval, #{title}, #{writer}, #{content}, sysdate, 0)
-	</insert>
-	<delete id="delete" parameterType="int">
-		delete from mybatisBoard
-		where
-		seq=#{seq}
-	</delete>
-	<select id="selectBySeq" parameterType="int" resultType="vo">
-		select *
-		from mybatisBoard where seq=#{seq} order by seq desc
-	</select>
-	<update id="update" parameterType="vo">
-		update mybatisBoard
-      set title = #{title}, writer = #{writer}, content = #{content} where seq = #{seq}
-	</update>
-	<select id="selectSearch" parameterType="hashMap" resultType="vo">
-		<!-- 
-		1.Java
-		Map<String,String> map = new HashMap<>();
-		map.put("column",column); // column : title or writer or content
-		map.put("keyvalue",keyvalue) // keyvalue : 김연아
-		
-		2.함수 호출시
-		session.selectList("dao.selectSearch",map);
-		
-		3.xml에서
-		parameterType = "hashMap"
-		map key: column, keyvalue
-		map value: #{column}, #{keyvalue}
-		
-		${column}: 컬럼명
-		-->
-	select * from mybatisBoard
-		<if test="column!=null">
-			where ${column} like '%'|| #{keyvalue} || '%'
-		</if>		
-		order by seq desc
-	</select>
-	<select id="selectSearch2" parameterType="hashMap" resultType="vo">
-		select * from mybatisBoard
-		<where>
-			<if test ="title != null">
-				title like '%' || #{keyvalue} || '%'
-			</if>
-			<if test ="writer != null">
-				or writer like '%' || #{keyvalue} || '%'
-			</if>
-			<if test ="content != null">
-				or content like '%' || #{keyvalue} || '%'
-			</if>
-			order by seq desc
-		</where>
-	</select>
-	<update id="updateReadCount" parameterType="hashMap">
-		update mybatisBoard set readcount = #{readcount} where seq = #{seq}
-	</update>
+
+	 <insert id="insert"   parameterType="vo">
+ 	 	insert into mybatisBoard(seq, title, writer, content, regdate, readcount )
+ 	 		values(board_seq.nextval, #{title} , #{writer}, #{content}, sysdate, 0)
+ 	 </insert>
+ 	 
+ 	 <select id="detailList" resultType="vo"  parameterType="int">
+ 	 	select * from mybatisBoard where seq = #{ seq }
+ 	 </select>
+ 	 
+ 	 <update id="update"  parameterType="vo">
+ 	 	update mybatisBoard  
+ 	 			set title=#{title}, writer=#{writer}, content=#{content}
+ 	 			where seq = #{seq}
+ 	 </update>
+ 	 
+ 	 <select id="selectSearch"  parameterType="hashMap"  resultType="vo">
+ 	 <!-- 
+ 	 	  1. Java 코드
+ 	 	  Map<String, String> map = new HashMap<>();   
+ 	 	  map.put("column", column);  // column : title or writer or contnet
+ 	 	  map.put("keyvalue", keyvalue)  // keyvalue : 김연아
+ 	 	  
+ 	 	  2. 함수호출시
+ 	 	  session.selectList("dao.selectSearch", map);
+ 	 	  
+ 	 	  3. xml에서
+ 	 	  parameterType="hashMap" 
+ 	 	  
+ 	 	  map key : column, keyvalue
+ 	 	  map value : #{ column }, #{ keyvalue }
+ 	 	  
+ 	 	  ${ column } : 컬럼명
+ 	 	   -->
+ 	 	  
+ 	 	  select * from mybatisBoard
+ 	 	  	<!-- where writer like '%김%'  -->
+ 	 	  		<if test="column != null ">
+ 	 	  				where  ${column} like  '%' || #{keyvalue} || '%' 	 	  		
+ 	 	  		</if>
+ 	 </select>
+ 	 
+ 	 <select id="selectSearch2"  parameterType="hashMap"  resultType="vo">
+ 	 	  select * from mybatisBoard
+ 	 	  <where>
+ 	 	  		<if test="title != null">
+ 	 	  				<!-- title = #{keyvalue} -->
+ 	 	  				title like '%' || #{keyvalue} || '%'
+ 	 	  		</if>
+ 	 	  		<if test="writer != null">
+ 	 	  				or  writer like '%' ||  #{keyvalue} || '%'
+ 	 	  		</if>
+ 	 	  		<if test="content != null">
+ 	 	  				or content like '%' ||  #{keyvalue} || '%'
+ 	 	  		</if>
+ 	 	  </where>
+ 	 </select>
+ 	 
+ 	  <delete id="delete" parameterType="int">
+ 	 	DELETE FROM MYBATISBOARD WHERE SEQ = #{SEQ}
+ 	 </delete>
+ 	 
 </mapper>
+
+
+
+
+
+
+
+

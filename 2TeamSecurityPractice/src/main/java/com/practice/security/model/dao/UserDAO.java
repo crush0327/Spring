@@ -1,5 +1,6 @@
 package com.practice.security.model.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.practice.security.model.dto.UserDTO;
@@ -13,4 +14,8 @@ public interface UserDAO {
 	public Map<String, Object> selectById(String userid);
 	
 	public void updateUser(Map<String, Object> map);
+	
+	public void deleteUser(String userid);
+	
+	public List<UserDTO> selectAll();
 }

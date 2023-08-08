@@ -31,6 +31,11 @@
 		set name= #{name}
 		where id = #{id}
 	</update>
-
-
+	
+	<delete id = "deleteUser" parameterType="String">
+	delete from member_practice where id =#{userid}
+	</delete>
+	<select id="selectAll" resultType="com.practice.security.model.dto.UserDTO">
+		select * from member_practice
+	</select>
 </mapper>

@@ -13,7 +13,6 @@
 	<br>
 
 	<form action="update.do" name="form" method=post>
-		<input type="hidden" name="modify" id="modify" value="1">
 		<table class="type09">
 			<tbody>
 				<tr>
@@ -37,12 +36,12 @@
 					<td><input type="text" name="regDate" id="regDate"
 						value="${map.REGDATE}" readonly=readonly></td>
 				</tr>
-				<tr>
-				<td>
-		<input type="submit" value="이름 수정"></td>
-		<td><input type="button" value="홈으로" onclick="location.href='../home.do'"></td>
-				</tr>
 			</tbody>
+			<tr>
+				<td><input type="submit" value="이름 수정"></td>
+				<td><input type="button" value="홈으로"
+					onclick="location.href='../home.do'"></td>
+			</tr>
 		</table>
 	</form>
 

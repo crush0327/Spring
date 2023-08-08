@@ -1,5 +1,6 @@
 package com.practice.security.model.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -33,6 +34,16 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void updateUser(Map<String, Object> map) {
 		sqlSession.update("user.updateUser", map);
+	}
+	
+	@Override
+	public void deleteUser(String userid) {
+		sqlSession.delete("user.deleteUser");
+	}
+	
+	@Override
+	public List<UserDTO> selectAll() {
+		return sqlSession.selectList("user.selectAll");
 	}
 
 }

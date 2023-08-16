@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean class="quiz.IMessageImplKor"  id="kor">
+		<constructor-arg><value>이도연</value></constructor-arg>
+		<constructor-arg  value="안녕하세요!" />
+	</bean>
+	
+	<bean id="eng"  class="quiz.IMessageImplEng">
+		<property name="greeting" value="Hello~~~" />
+		<property name="name"><value>김연아</value></property>
+	</bean>
+
+</beans>
